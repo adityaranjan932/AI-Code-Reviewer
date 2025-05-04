@@ -1,0 +1,40 @@
+# Node dependencies
+node_modules/
+
+# Build artifacts (Frontend & Backend)
+dist/
+dist-ssr/
+build/
+
+# Log files
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment variables (important for security)
+# Ignore all .env files, but keep examples
+.env
+.env.*
+!.env.example
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Temporary files in root
+temp.js
+temp.md

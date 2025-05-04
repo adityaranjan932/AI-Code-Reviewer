@@ -1,6 +1,6 @@
 * {
-  margin: 0%;
-  padding: 0%;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -9,110 +9,31 @@ body,
 #root {
   height: 100%;
   width: 100%;
-}
-
-main {
-  height: 100%;
-  width: 100%;
-  padding: 1.5rem;
   display: flex;
-  gap: 1rem;
+  flex-direction: column;
+  background-color: #242424;
+  color: rgba(255, 255, 255, 0.87);
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
 }
 
-main .left,
-main .right {
-  height: 100%;
-  flex-basis: 50%;
-  border-radius: 0.7rem;
-}
-
-main .left {
-  background-color: #000000;
-  position: relative;
-}
-
-.left .code,
-.code pre,
-.code pre code {
-  height: 100%;
+/* Main content area below navbar */
+.app-main-content { /* Renamed from 'main' to avoid conflict */
+  flex-grow: 1; /* Fill remaining vertical space */
   width: 100%;
-  margin: 0;
-  border-radius: 0.7rem;
-  background-color: #0c0c0c;
+  padding: 0 1.5rem 1.5rem 1.5rem; /* Padding around panels (no top padding) */
+  display: flex;
+  flex-direction: row; /* Revert to row layout */
+  gap: 1rem; /* Restore original gap */
+  overflow: hidden; /* Prevent layout issues */
 }
 
-main .left .review {
-  position: absolute;
-  bottom: 1rem;
-  right: 1rem;
-  background-color: rgb(219, 219, 255);
-  color: #000000;
-  padding: 0.5rem 2rem;
-  font-weight: 500;
-  cursor: pointer;
-  user-select: none;
-  border-radius: 0.7rem;
-}
-
-
-main .right {
-  background-color: #343434;
-  padding: 1rem 2rem;
-  font-size: 1rem;
-  overflow: auto;
-}
-
-.spinner {
-  border: 6px solid #f3f3f3;
-  border-top: 6px solid #646cff;
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
-  animation: spin 1s linear infinite;
-  margin: 15rem auto;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.custom-code-block {
-  position: relative;
-  background: #18181b;
-  border-radius: 8px;
-  margin: 1.5em 0;
-  padding: 1em 1em 1em 1em;
-  overflow-x: auto;
-}
-.custom-code-block pre {
-  background: transparent;
-  margin: 0;
-  padding: 0;
-  border: none;
-  box-shadow: none;
-}
-.custom-code-block code {
-  color: #f8f8f2;
-  background: none;
-  font-size: 1em;
-  font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
-}
-.copy-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #23272f;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  padding: 0.3em 0.8em;
-  font-size: 0.9em;
-  cursor: pointer;
-  opacity: 0.8;
-  transition: opacity 0.2s;
-  z-index: 2;
-}
-.copy-btn:hover {
-  opacity: 1;
+/* Left and Right panel containers */
+.left-panel,
+.right-panel {
+  flex-basis: 50%; /* Each takes half the width */
+  height: 100%; /* Fill vertical space of main */
+  overflow: hidden; /* Keep this */
+  display: flex; /* Keep this */
+  position: relative; /* Add relative positioning if needed for children */
 }

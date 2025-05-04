@@ -1,0 +1,117 @@
+/* Frontend/src/components/AuthModal.css */
+.auth-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's above other content */
+  -webkit-backdrop-filter: blur(4px); /* For Safari - Should come before standard */
+  backdrop-filter: blur(4px); /* Apply blur effect */
+}
+
+.auth-modal-content {
+  background-color: #2d2d2d; /* Dark background for the modal box */
+  padding: 1.5rem 2rem; /* Further reduced vertical padding */
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+  width: 100%;
+  max-width: 380px; /* Slightly reduced max-width */
+  color: #e0e0e0; /* Light text color */
+}
+
+.auth-modal-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #aaa;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.auth-modal-close-btn:hover {
+  color: #fff;
+}
+
+/* Basic form styling (can be expanded in specific form components) */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem; /* Further reduced gap */
+}
+
+.auth-form h2 {
+  text-align: center;
+  margin-bottom: 1rem; /* Further reduced margin */
+  font-size: 1.4rem; /* Slightly smaller heading */
+  color: #fff;
+}
+
+.auth-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem; /* Further reduced gap */
+  font-size: 0.85rem; /* Slightly smaller label */
+  color: #ccc;
+}
+
+.auth-form input {
+  padding: 0.5rem; /* Further reduced padding */
+  border-radius: 4px;
+  border: 1px solid #555;
+  background-color: #3a3a3a;
+  color: #e0e0e0;
+  font-size: 0.9rem; /* Further reduced font size */
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: #646cff;
+  box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.3);
+}
+
+.auth-form button[type="submit"] {
+  padding: 0.6rem; /* Further reduced padding */
+  border-radius: 4px;
+  border: none;
+  background-color: #646cff;
+  color: white;
+  font-size: 0.9rem; /* Further reduced font size */
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 0.6rem; /* Further reduced margin */
+  transition: background-color 0.2s;
+}
+
+.auth-form button[type="submit"]:hover {
+  background-color: #535bf2;
+}
+
+.auth-switch-link {
+  text-align: center;
+  margin-top: 0.8rem; /* Further reduced margin */
+  font-size: 0.85rem; /* Slightly smaller text */
+}
+
+.auth-switch-link button {
+  background: none;
+  border: none;
+  color: #8ab4f8; /* Light blue link color */
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  font-size: inherit;
+}
+
+.auth-switch-link button:hover {
+  color: #a3c7fa;
+}

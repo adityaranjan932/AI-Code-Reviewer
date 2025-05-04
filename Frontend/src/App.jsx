@@ -1,162 +1,87 @@
-import React, { useRef, useState, useEffect } from 'react'
-import "prismjs/themes/prism-tomorrow.css"
-import prism from "prismjs"
-import Markdown from "react-markdown"
-import rehypeHighlight from "rehype-highlight";
-import "highlight.js/styles/github-dark.css";
-import axios from 'axios'
-import './App.css'
-import ImageChat from './components/ImageChat'
-import ChatInput from './components/ChatInput'
-import { FaRegImage, FaPlus } from 'react-icons/fa'
-import Editor from "react-simple-code-editor"
+import React, { useState, useCallback, useContext } from 'react'; // Add useContext
+import axios from 'axios';
+import './App.css';
+import Navbar from './components/Navbar';
+import EditorPanel from './components/EditorPanel';
+import MarkdownPanel from './components/MarkdownPanel';
+import AuthContext from './context/AuthContext'; // Import AuthContext
 
-function CodeBlock({ children, className }) {
-  const codeRef = useRef(null)
-  const [copied, setCopied] = useState(false)
-  const language = className ? className.replace('language-', '') : ''
+const defaultCode = `function sum(a, b) {
+  return a + b;
+}`;
 
-  const handleCopy = () => {
-    if (codeRef.current) {
-      navigator.clipboard.writeText(codeRef.current.innerText)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 1500)
-    }
-  }
+// Configure axios to send cookies with requests (if not done in AuthContext)
+// axios.defaults.withCredentials = true; // Can be set globally here too
 
-  return (
-    <div className="custom-code-block">
-      <pre className={className}>
-        <code ref={codeRef}>{children}</code>
-      </pre>
-      <button className="copy-btn" onClick={handleCopy}>
-        {copied ? 'Copied!' : 'Copy'}
-      </button>
-    </div>
-  )
-}
+function App() {
+  const [review, setReview] = useState('');
+  const [loadingReview, setLoadingReview] = useState(false); // Rename loading state
+  const { user } = useContext(AuthContext); // Get user state if needed elsewhere
 
-export default function App() {
-  const [ code, setCode ] = useState(` function sum() {
-    return 1 + 1
-  }`)
-  const [ review, setReview ] = useState("")
-  const [ loading, setLoading ] = useState(false)
-  const [messages, setMessages] = useState([])
-  const [image, setImage] = useState(null)
-  const fileInputRef = useRef()
-
-  useEffect(() => {
-    prism.highlightAll()
-  }, [])
-
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0])
-  }
-
-  async function reviewCode() {
-    setLoading(true)
-    setReview("")
+  const handleReviewRequest = useCallback(async (code, image) => {
+    setLoadingReview(true); // Use specific loading state
+    setReview('');
     try {
-      let response
+      let response;
+      const endpoint = image
+        ? 'http://localhost:3000/ai/image-review'
+        : 'http://localhost:3000/ai/get-review';
+
+      // Use axios instance configured with credentials if available
+      // Create instance here to ensure it includes credentials for this specific request
+      const axiosInstance = axios.create({ withCredentials: true });
+
       if (image) {
-        const formData = new FormData()
-        formData.append('prompt', code)
-        formData.append('image', image)
-        response = await axios.post('http://localhost:3000/ai/image-review', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        })
+        const formData = new FormData();
+        const promptToSend = code || "Describe or analyze this image.";
+        formData.append('prompt', promptToSend);
+        formData.append('image', image);
+        response = await axiosInstance.post(endpoint, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
       } else {
-        response = await axios.post('http://localhost:3000/ai/get-review', { code })
+        if (!code) {
+            setReview("Please enter some code to review.");
+            setLoadingReview(false);
+            return;
+        }
+        response = await axiosInstance.post(endpoint, { code });
       }
-      setReview(response.data)
+      setReview(response.data);
     } catch (err) {
-      setReview('Error: ' + (err.response?.data || err.message))
+      const errorMessage = err.response?.data || err.message || 'An unknown error occurred.';
+      // Check for specific auth errors if needed
+      if (err.response?.status === 401) {
+         setReview(`Error: Authentication required. Please log in.`);
+         // Optionally trigger login modal here if desired
+      } else {
+         setReview(`Error: ${errorMessage}`);
+      }
+    } finally {
+      setLoadingReview(false);
     }
-    setLoading(false)
-  }
+  }, []);
 
   return (
     <>
-      <main>
-        <div className="left">
-          <div className="code" style={{position:'relative'}}>
-            <Editor
-              value={code}
-              onValueChange={code => setCode(code)}
-              highlight={code => prism.highlight(code, prism.languages.javascript, "javascript")}
-              padding={10}
-              style={{
-                fontFamily: '"Fira code", "Fira Mono", monospace',
-                fontSize: 16,
-                border: "1px solid #ddd",
-                borderRadius: "5px",
-                height: "100%",
-                width: "100%"
-              }}
-            />
-            <button
-              type="button"
-              onClick={() => fileInputRef.current.click()}
-              className="plus-inside-editor"
-              title="Upload image for review"
-              style={{
-                position: 'absolute',
-                bottom: 16,
-                left: 16,
-                background: '#23272f',
-                border: '1px solid #444',
-                borderRadius: '50%',
-                width: 28,
-                height: 28,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                boxShadow: '0 1px 4px #0006',
-                padding: 0,
-                zIndex: 2,
-                transition: 'background 0.2s, border 0.2s',
-              }}
-              onMouseOver={e => e.currentTarget.style.background = '#343a40'}
-              onMouseOut={e => e.currentTarget.style.background = '#23272f'}
-            >
-              <FaPlus size={14} style={{color:'#fff'}} />
-            </button>
-            <input
-              type="file"
-              accept="image/*"
-              ref={fileInputRef}
-              onChange={handleImageChange}
-              style={{display:'none'}}
-            />
-            {image && (
-              <span style={{position:'absolute',bottom:52,left:16,fontSize:12,color:'#fff',background:'#23272f',padding:'2px 8px',borderRadius:4,zIndex:2}}>
-                {image.name}
-              </span>
-            )}
-          </div>
-          <div style={{display:'flex',alignItems:'center',gap:8,marginTop:16,justifyContent:'flex-end'}}>
-            <div
-              onClick={reviewCode}
-              className="review"
-              style={{marginLeft:0}}
-            >Review</div>
-          </div>
+      <Navbar /> {/* Navbar now handles its own auth state via context */}
+      <main className="app-main-content">
+        <div className="left-panel">
+          <EditorPanel
+            initialCode={defaultCode}
+            onReview={handleReviewRequest}
+            isLoading={loadingReview} // Pass review loading state
+          />
         </div>
-        <div className="right">
-          {loading ? (
-            <div className="spinner"></div>
-          ) : (
-            <Markdown
-              rehypePlugins={[ rehypeHighlight ]}
-              components={{
-                code: CodeBlock
-              }}
-            >{review}</Markdown>
-          )}
+        <div className="right-panel">
+          <MarkdownPanel
+            review={review}
+            isLoading={loadingReview} // Pass review loading state
+          />
         </div>
       </main>
     </>
-  )
+  );
 }
+
+export default App;
