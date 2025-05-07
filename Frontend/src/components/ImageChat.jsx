@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import axios from 'axios'
+import { apiConnector } from '../services/apiConnector'; // Import apiConnector
 import { FaRegImage } from 'react-icons/fa'
 
 function ImageChat() {
@@ -21,9 +21,7 @@ function ImageChat() {
     if (image) formData.append('image', image)
     formData.append('prompt', prompt)
     try {
-      const res = await axios.post('http://localhost:3000/ai/image-review', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
+      const res = await apiConnector('POST', '/ai/image-review', formData, { 'Content-Type': 'multipart/form-data' }); // New way
       setResponse(res.data)
     } catch (err) {
       setResponse('Error: ' + (err.response?.data || err.message))

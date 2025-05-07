@@ -21,19 +21,24 @@ body,
 .app-main-content { /* Renamed from 'main' to avoid conflict */
   flex-grow: 1; /* Fill remaining vertical space */
   width: 100%;
-  padding: 0 1.5rem 1.5rem 1.5rem; /* Padding around panels (no top padding) */
+  padding: 1.5rem; /* Consistent padding on all sides */
   display: flex;
-  flex-direction: row; /* Revert to row layout */
-  gap: 1rem; /* Restore original gap */
+  flex-direction: row; /* Ensure side-by-side layout */
+  gap: 1.5rem; /* Increased gap for better visual separation */
   overflow: hidden; /* Prevent layout issues */
 }
 
 /* Left and Right panel containers */
 .left-panel,
 .right-panel {
-  flex-basis: 50%; /* Each takes half the width */
-  height: 100%; /* Fill vertical space of main */
-  overflow: hidden; /* Keep this */
-  display: flex; /* Keep this */
-  position: relative; /* Add relative positioning if needed for children */
+  flex-basis: calc(50% - (1.5rem / 2)); /* Each takes half the width, accounting for the new gap */
+  height: 100%; /* Fill available vertical space */
+  overflow: hidden; /* Important for border-radius and shadow to look right */
+  display: flex; /* Allows child component to fill the panel */
+  position: relative;
+  border-radius: 0.7rem; /* Rounded corners for the panel containers */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth and a modern look */
 }
+
+/* The EditorPanel and MarkdownPanel components already have height: 100% and width: 100% 
+   and border-radius: 0.7rem in their respective CSS files, so they will fit nicely. */

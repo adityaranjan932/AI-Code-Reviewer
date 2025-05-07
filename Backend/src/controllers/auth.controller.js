@@ -1,5 +1,6 @@
 // Backend/src/controllers/auth.controller.js
 const User = require('../models/User.model');
+const ReviewHistory = require('../models/ReviewHistory.model'); // Import ReviewHistory model
 const jwt = require('jsonwebtoken');
 const { promisify } = require('util'); // For promisifying jwt.sign
 
@@ -135,6 +136,54 @@ exports.logout = (req, res) => {
   res.status(200).json({ status: 'success' });
 };
 
+// Controller function to get user's review history
+exports.getReviewHistory = async (req, res, next) => {
+  try {
+    // req.user should be populated by the 'protect' middleware
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({
+        status: 'fail',
+        message: 'User not authenticated to access history.',
+      });
+    }
+
+    const history = await ReviewHistory.find({ user: req.user.id })
+      .sort({ createdAt: -1 }) // Sort by newest first
+      .select('-user -__v'); // Exclude user ID and version key from results
+
+    res.status(200).json({
+      status: 'success',
+      results: history.length,
+      data: {
+        history,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to retrieve review history.',
+      error: error.message,
+    });
+  }
+};
+
+// Controller to get the current logged-in user's data
+exports.getMe = (req, res, next) => {
+  // req.user is populated by the 'protect' middleware
+  if (!req.user) {
+    return res.status(401).json({
+      status: 'fail',
+      message: 'Not logged in or session expired.'
+    });
+  }
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: req.user
+    }
+  });
+};
+
 // Optional: Middleware to protect routes (example)
 exports.protect = async (req, res, next) => {
   try {
@@ -150,10 +199,9 @@ exports.protect = async (req, res, next) => {
     }
 
     if (!token) {
-      return res.status(401).json({
-          status: 'fail',
-          message: 'You are not logged in! Please log in to get access.'
-      });
+      // If no token, proceed without setting req.user
+      // The controllers will handle not saving history if req.user is not set.
+      return next();
     }
 
     // 2) Verification token
@@ -163,6 +211,8 @@ exports.protect = async (req, res, next) => {
     // Populate user data including names, excluding password
     const currentUser = await User.findById(decoded.id).select('-password');
     if (!currentUser) {
+       // If token is present but user doesn't exist (e.g., deleted account),
+       // treat as an authentication failure.
        return res.status(401).json({
            status: 'fail',
            message: 'The user belonging to this token does no longer exist.'
@@ -173,14 +223,16 @@ exports.protect = async (req, res, next) => {
     req.user = currentUser; // Attach user to the request object
     next();
   } catch (error) {
-     // Handle specific JWT errors
+     // Handle specific JWT errors if a token was present but invalid
      let message = 'Invalid token or session expired. Please log in again.';
      if (error.name === 'JsonWebTokenError') {
          message = 'Invalid token. Please log in again.';
      } else if (error.name === 'TokenExpiredError') {
          message = 'Your session has expired. Please log in again.';
      }
-     res.status(401).json({
+     // If an error occurs during token processing (e.g., verification failed),
+     // it's an authentication issue.
+     return res.status(401).json({
          status: 'fail',
          message: message,
          // error: process.env.NODE_ENV === 'development' ? error.message : undefined

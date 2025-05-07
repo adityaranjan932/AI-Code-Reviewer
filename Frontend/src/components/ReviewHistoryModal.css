@@ -1,0 +1,152 @@
+/* Frontend/src/components/ReviewHistoryModal.css */
+.review-history-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050; /* Higher than auth modal */
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+  }
+  
+  .review-history-modal-content {
+    background-color: #2a2a2e; /* Dark background */
+    color: #e0e0e0; /* Light text */
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    position: relative;
+    width: 90%;
+    max-width: 700px; /* Wider for history content */
+    max-height: 80vh; /* Limit height and allow scrolling */
+    overflow-y: auto; /* Enable vertical scroll */
+    border: 1px solid #444;
+  }
+  
+  .review-history-modal-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #aaa;
+    cursor: pointer;
+    line-height: 1;
+  }
+  
+  .review-history-modal-close-btn:hover {
+    color: #fff;
+  }
+  
+  .review-history-modal-content h2 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.6rem;
+    color: #fff;
+    border-bottom: 1px solid #444;
+    padding-bottom: 0.8rem;
+  }
+  
+  .history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .history-item {
+    background-color: #333337; /* Slightly lighter item background */
+    border: 1px solid #4a4a4f;
+    border-radius: 6px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  
+  .history-item-header {
+    font-size: 0.9rem;
+    color: #b0b0b0;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px dashed #555;
+  }
+  
+  .history-item-header strong {
+    color: #d0d0d0;
+  }
+  
+  .history-item-details p {
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  .history-item-details strong {
+    color: #c5c5c5;
+  }
+  
+  .code-snippet,
+  .review-snippet {
+    background-color: #252528; /* Darker background for code/review blocks */
+    border: 1px solid #404043;
+    border-radius: 4px;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    max-height: 200px; /* Limit height of snippets */
+    overflow-y: auto; /* Allow scrolling within snippets */
+    white-space: pre-wrap; /* Wrap long lines */
+    word-break: break-all; /* Break long words/tokens */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    color: #dcdcdc;
+  }
+  
+  .code-snippet code,
+  .review-snippet code {
+    font-family: inherit;
+    background: none; /* Remove Prism's default background if it interferes */
+  }
+  
+  .error-message {
+    color: #ff6b6b; /* Red for errors */
+    text-align: center;
+    font-size: 1rem;
+    padding: 1rem;
+    background-color: rgba(255, 107, 107, 0.1);
+    border: 1px solid #ff6b6b;
+    border-radius: 4px;
+  }
+  
+  /* Scrollbar styling for webkit browsers */
+  .review-history-modal-content::-webkit-scrollbar,
+  .code-snippet::-webkit-scrollbar,
+  .review-snippet::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .review-history-modal-content::-webkit-scrollbar-track,
+  .code-snippet::-webkit-scrollbar-track,
+  .review-snippet::-webkit-scrollbar-track {
+    background: #2a2a2e;
+    border-radius: 4px;
+  }
+  
+  .review-history-modal-content::-webkit-scrollbar-thumb,
+  .code-snippet::-webkit-scrollbar-thumb,
+  .review-snippet::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 4px;
+    border: 2px solid #2a2a2e; /* Creates padding around thumb */
+  }
+  
+  .review-history-modal-content::-webkit-scrollbar-thumb:hover,
+  .code-snippet::-webkit-scrollbar-thumb:hover,
+  .review-snippet::-webkit-scrollbar-thumb:hover {
+    background-color: #777;
+  }

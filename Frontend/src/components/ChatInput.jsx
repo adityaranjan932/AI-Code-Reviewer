@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
+import { apiConnector } from '../services/apiConnector'; // Import apiConnector
 import { FaPlus, FaRegImage } from 'react-icons/fa'
-import axios from 'axios'
 
 function ChatInput({ onResponse }) {
   const [prompt, setPrompt] = useState('')
@@ -24,9 +24,7 @@ function ChatInput({ onResponse }) {
     if (image) formData.append('image', image)
     formData.append('prompt', prompt)
     try {
-      const res = await axios.post('http://localhost:3000/ai/image-review', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
+      const res = await apiConnector('POST', '/ai/image-review', formData, { 'Content-Type': 'multipart/form-data' }); // New way
       onResponse(res.data)
       setPrompt('')
       setImage(null)

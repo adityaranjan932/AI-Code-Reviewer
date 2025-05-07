@@ -1,31 +1,58 @@
 // Frontend/src/context/AuthContext.jsx
 import React, { createContext, useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+// import axios from 'axios'; // Remove direct axios import
+import { apiConnector } from '../services/apiConnector'; // Import apiConnector
 
 const AuthContext = createContext();
 
-// Configure axios to send cookies with requests
-const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000', // Your backend base URL
-  withCredentials: true, // Crucial for sending/receiving cookies
-});
+// Remove axiosInstance creation here, it will be used from apiConnector.js
+// const axiosInstance = axios.create({
+//   baseURL: 'http://localhost:3000', // Your backend base URL
+//   withCredentials: true, // Crucial for sending/receiving cookies
+// });
 
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // Start loading until initial check is done
+  const [loading, setLoading] = useState(true);
+  const [selectedHistoryItem, setSelectedHistoryItem] = useState(null);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  // const [authModalReason, setAuthModalReason] = useState(''); // Remove reason if only for limit
 
-  // Function to fetch user data (e.g., on initial load or after login)
-  // This is a placeholder - ideally, you'd have a '/me' endpoint
-  // protected by the 'protect' middleware in the backend.
-  // For now, we'll rely on login/signup setting the user.
+  // Remove anonymous review count functions
+  // const getAnonymousReviewCount = useCallback(() => { ... });
+  // const incrementAnonymousReviewCount = useCallback(() => { ... });
+  // const resetAnonymousReviewCount = useCallback(() => { ... });
+
+  const openAuthModal = useCallback(() => { // Remove reason parameter
+    // setAuthModalReason(reason);
+    setAuthModalOpen(true);
+  }, []);
+
+  const closeAuthModal = useCallback(() => {
+    setAuthModalOpen(false);
+    // setAuthModalReason('');
+  }, []);
+
   const fetchUser = useCallback(async () => {
-     // In a real app, you might have an endpoint like '/api/auth/me'
-     // to verify the cookie and get user data on page load.
-     // For simplicity here, we assume if login/signup was successful,
-     // the user state is set.
-     // You could add a check here: if a cookie exists, try to verify it
-     setLoading(false);
+    setLoading(true);
+    try {
+      // This endpoint will verify the cookie and return user data
+      // const response = await axiosInstance.get('/api/auth/me'); // Old way
+      const response = await apiConnector('GET', '/api/auth/me'); // New way
+      if (response.data.status === 'success') {
+        setUser(response.data.data.user);
+      } else {
+        // No active session or an error occurred
+        setUser(null);
+      }
+    } catch (error) {
+      // Likely a 401 if no session, or network error
+      setUser(null);
+      console.log('No active session or error fetching user:', error.response?.data?.message || error.message);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -34,9 +61,11 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axiosInstance.post('/api/auth/login', { email, password });
+      const response = await apiConnector('POST', '/api/auth/login', { email, password });
       if (response.data.status === 'success') {
         setUser(response.data.data.user);
+        // resetAnonymousReviewCount(); // Remove reset
+        closeAuthModal();
         return { success: true };
       }
     } catch (error) {
@@ -46,13 +75,13 @@ export const AuthProvider = ({ children }) => {
     return { success: false, message: 'Login failed' }; // Default failure
   };
 
-  const signup = async (firstName, lastName, email, password) => { // Add firstName, lastName
-     // Note: Backend currently logs user in immediately after signup
+  const signup = async (firstName, lastName, email, password) => {
     try {
-      // Include firstName and lastName in the request body
-      const response = await axiosInstance.post('/api/auth/signup', { firstName, lastName, email, password });
+      const response = await apiConnector('POST', '/api/auth/signup', { firstName, lastName, email, password });
       if (response.data.status === 'success') {
-        setUser(response.data.data.user); // Set user state after successful signup/login
+        setUser(response.data.data.user);
+        // resetAnonymousReviewCount(); // Remove reset
+        closeAuthModal();
         return { success: true };
       }
     } catch (error) {
@@ -64,7 +93,8 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axiosInstance.get('/api/auth/logout');
+      // await axiosInstance.get('/api/auth/logout'); // Old way
+      await apiConnector('GET', '/api/auth/logout'); // New way
       setUser(null);
     } catch (error) {
       console.error("Logout failed:", error);
@@ -73,8 +103,37 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const selectHistoryItem = useCallback((item) => {
+    setSelectedHistoryItem({
+      code: item.prompt,
+      review: item.reviewContent,
+      language: item.language,
+      id: item._id || Date.now(), // Use history item's ID or a timestamp
+    });
+  }, []);
+
+  const clearSelectedHistoryItem = useCallback(() => {
+    setSelectedHistoryItem(null);
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
+    <AuthContext.Provider value={{
+      user,
+      loading,
+      login,
+      signup,
+      logout,
+      selectedHistoryItem,
+      selectHistoryItem,
+      clearSelectedHistoryItem,
+      fetchUser,
+      authModalOpen,
+      // authModalReason, // Remove reason
+      openAuthModal,
+      closeAuthModal
+      // getAnonymousReviewCount, // Remove review count functions
+      // incrementAnonymousReviewCount
+    }}>
       {children}
     </AuthContext.Provider>
   );

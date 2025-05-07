@@ -1,10 +1,16 @@
 // Frontend/src/components/AuthModal.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import AuthContext from '../context/AuthContext';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
 import './AuthModal.css';
 
 const AuthModal = ({ isOpen, onClose }) => {
+  const {
+    authModalOpen,
+    closeAuthModal,
+    authModalReason, // Get the reason from context
+  } = useContext(AuthContext);
   const [isLoginView, setIsLoginView] = useState(true); // Start with login view
 
   // Effect to handle closing modal on Escape key press
@@ -36,6 +42,7 @@ const AuthModal = ({ isOpen, onClose }) => {
     <div className="auth-modal-overlay" onClick={onClose}>
       <div className="auth-modal-content" onClick={handleContentClick}>
         <button className="auth-modal-close-btn" onClick={onClose}>&times;</button>
+        {authModalReason && <p className="auth-modal-reason">{authModalReason}</p>} {/* Display the reason */}
         {isLoginView ? (
           <LoginForm
             onSwitchToSignup={() => setIsLoginView(false)}
