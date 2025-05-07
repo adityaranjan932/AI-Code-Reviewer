@@ -42,3 +42,21 @@ body,
 
 /* The EditorPanel and MarkdownPanel components already have height: 100% and width: 100% 
    and border-radius: 0.7rem in their respective CSS files, so they will fit nicely. */
+
+/* Media Query for mobile responsiveness */
+@media (max-width: 768px) {
+  .app-main-content {
+    flex-direction: column;
+    padding: 0.5rem; /* Adjusted padding for smaller screens */
+    gap: 0.5rem;     /* Adjusted gap for smaller screens */
+  }
+
+  .left-panel,
+  .right-panel {
+    flex-basis: auto; /* Reset flex-basis for column layout */
+    width: 100%;    /* Panels take full width */
+    height: auto;   /* Height will be managed by flex property */
+    flex: 1;        /* Each panel takes equal share of available vertical space */
+    /* min-height: 250px; /* Optional: ensure a minimum height for usability */
+  }
+}
