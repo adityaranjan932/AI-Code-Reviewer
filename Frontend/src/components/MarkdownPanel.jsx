@@ -49,7 +49,7 @@ const MarkdownPanel = ({ review, isLoading }) => {
             code: CodeBlock, // Use custom CodeBlock for syntax highlighting and copy
           }}
         >
-          {review || "Submit code or an image on the left for AI review."}
+          {review || "Submit code or an image  for AI review."}
         </Markdown>
       )}
     </div>

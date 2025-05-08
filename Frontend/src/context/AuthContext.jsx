@@ -2,6 +2,7 @@
 import React, { createContext, useState, useEffect, useCallback } from 'react';
 // import axios from 'axios'; // Remove direct axios import
 import { apiConnector } from '../services/apiConnector'; // Import apiConnector
+import { toast } from 'react-toastify'; // Import toast
 
 const AuthContext = createContext();
 
@@ -66,13 +67,17 @@ export const AuthProvider = ({ children }) => {
         setUser(response.data.data.user);
         // resetAnonymousReviewCount(); // Remove reset
         closeAuthModal();
+        toast.success("Logged in successfully!"); 
         return { success: true };
       }
     } catch (error) {
+      const errorMessage = error.response?.data?.message || 'Login failed';
       console.error("Login failed:", error.response?.data || error.message);
-      return { success: false, message: error.response?.data?.message || 'Login failed' };
+      toast.error(errorMessage); 
+      return { success: false, message: errorMessage };
     }
-    return { success: false, message: 'Login failed' }; // Default failure
+    toast.error('Login failed'); 
+    return { success: false, message: 'Login failed' }; 
   };
 
   const signup = async (firstName, lastName, email, password) => {
@@ -82,13 +87,17 @@ export const AuthProvider = ({ children }) => {
         setUser(response.data.data.user);
         // resetAnonymousReviewCount(); // Remove reset
         closeAuthModal();
+        toast.success("Signed up successfully!"); 
         return { success: true };
       }
     } catch (error) {
+      const errorMessage = error.response?.data?.message || 'Signup failed';
       console.error("Signup failed:", error.response?.data || error.message);
-      return { success: false, message: error.response?.data?.message || 'Signup failed' };
+      toast.error(errorMessage); 
+      return { success: false, message: errorMessage };
     }
-     return { success: false, message: 'Signup failed' }; // Default failure
+    toast.error('Signup failed'); 
+     return { success: false, message: 'Signup failed' }; 
   };
 
   const logout = async () => {
@@ -96,10 +105,12 @@ export const AuthProvider = ({ children }) => {
       // await axiosInstance.get('/api/auth/logout'); // Old way
       await apiConnector('GET', '/api/auth/logout'); // New way
       setUser(null);
+      toast.info("Logged out successfully."); 
     } catch (error) {
       console.error("Logout failed:", error);
       // Still clear user state on frontend even if backend call fails
       setUser(null);
+      toast.error("Logout failed on server, logged out locally."); 
     }
   };
 

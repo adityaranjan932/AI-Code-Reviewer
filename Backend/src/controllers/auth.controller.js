@@ -187,14 +187,14 @@ exports.getMe = (req, res, next) => {
 // Optional: Middleware to protect routes (example)
 exports.protect = async (req, res, next) => {
   try {
-    // 1) Getting token and check if it's there
+    // 1) Getting token and check if it\\'s there
     let token;
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith('Bearer')
     ) {
       token = req.headers.authorization.split(' ')[1];
-    } else if (req.cookies.jwt && req.cookies.jwt !== 'loggedout') { // Check cookie and ensure it's not the loggedout value
+    } else if (req.cookies.jwt && req.cookies.jwt !== 'loggedout') { // Check cookie and ensure it\\'s not the loggedout value
       token = req.cookies.jwt;
     }
 
