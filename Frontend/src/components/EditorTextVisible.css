@@ -1,0 +1,85 @@
+/* CRITICAL FIX for react-simple-code-editor text visibility */
+
+/* Make the textarea completely visible with white text */
+.editor-textarea textarea {
+  color: #ffffff !important;
+  background-color: #0c0c0c !important;
+  caret-color: #ffffff !important;
+  opacity: 1 !important;
+  z-index: 10 !important;
+  position: relative !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: none !important;
+}
+
+/* Remove the overlay that's hiding the text */
+.editor-textarea pre {
+  display: none !important;
+}
+
+/* Ensure container positioning */
+.editor-textarea {
+  position: relative !important;
+  color: #ffffff !important;
+}
+
+/* Maximum specificity overrides */
+html body .editor-panel-container .code-editor-wrapper .editor-textarea textarea {
+  color: #ffffff !important;
+  background-color: #0c0c0c !important;
+  opacity: 1 !important;
+}
+
+/* Override any inline styles */
+.editor-textarea textarea[style*="color"] {
+  color: #ffffff !important;
+}
+
+/* Placeholder styling */
+.editor-textarea textarea::placeholder {
+  color: #999999 !important;
+  opacity: 0.7 !important;
+}
+
+/* Universal fallback */
+.editor-textarea * {
+  color: inherit !important;
+}
+
+/* Styles for the working textarea version */
+.working-code-textarea {
+  color: #ffffff !important;
+  background-color: #0c0c0c !important;
+  caret-color: #ffffff !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+}
+
+/* Maximum specificity for working textarea */
+html body .working-code-textarea {
+  color: #ffffff !important;
+  background-color: #0c0c0c !important;
+}
+
+/* Placeholder for working textarea */
+.working-code-textarea::placeholder {
+  color: #999999 !important;
+  opacity: 0.7 !important;
+}
+
+/* GLOBAL OVERRIDE - Last resort to force text visibility */
+body .working-code-textarea,
+html body .working-code-textarea,
+* .working-code-textarea {
+  color: #ffffff !important;
+  background-color: #0c0c0c !important;
+  caret-color: #ffffff !important;
+}
+
+/* Override any possible inherited styles */
+.working-code-textarea * {
+  color: inherit !important;
+}

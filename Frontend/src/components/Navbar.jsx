@@ -46,26 +46,36 @@ const ProfileDropdown = ({ user, onLogout, onViewHistory }) => {
   );
 };
 
-const Navbar = () => {
+const Navbar = ({ onNewChat }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false); // State for history modal
-  const { user, loading, logout } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext); // Removed loading as per previous request
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const openHistoryModal = () => setIsHistoryModalOpen(true); // Function to open history modal
-  const closeHistoryModal = () => setIsHistoryModalOpen(false); // Function to close history modal
+  const openHistoryModal = () => setIsHistoryModalOpen(true);
+  const closeHistoryModal = () => setIsHistoryModalOpen(false);
+
+  const handleNewChat = () => {
+    if (onNewChat) {
+      onNewChat();
+    }
+  };
 
   return (
     <>
       <nav className="navbar">
-        <div className="navbar-spacer"></div>
-        <div className="navbar-title">AI Code Reviewer</div>
+        <div className="navbar-left-section">
+          <button className="navbar-button new-chat-button" onClick={handleNewChat}>
+            New Chat
+          </button>
+        </div>
+        <div className="navbar-title-section">
+          <div className="navbar-title">AI Code Reviewer</div>
+        </div>
         <div className="navbar-button-wrapper">
-          {loading ? (
-            <span>Loading...</span>
-          ) : user ? (
+          {user ? (
             <ProfileDropdown user={user} onLogout={logout} onViewHistory={openHistoryModal} />
           ) : (
             <button className="navbar-button" onClick={openModal}>

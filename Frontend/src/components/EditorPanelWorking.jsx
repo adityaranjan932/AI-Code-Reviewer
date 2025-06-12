@@ -1,20 +1,14 @@
-// Frontend/src/components/EditorPanel.jsx
+// Working version of EditorPanel with simple textarea
 import React, { useRef, useState, useEffect } from 'react';
-import Editor from 'react-simple-code-editor';
-import prism from 'prismjs';
 import { FaPlus, FaRegImage } from 'react-icons/fa';
 import './EditorPanel.css';
 import './EditorTextVisible.css';
 
-// Import prism languages if not already globally available
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
-// Removed prism theme import as it's conflicting with our custom colors
-
-const EditorPanel = ({ initialCode = '', onReview, isLoading }) => {
+const EditorPanelWorking = ({ initialCode = '', onReview, isLoading }) => {
   const [code, setCode] = useState(initialCode);
   const [image, setImage] = useState(null);
   const fileInputRef = useRef();
+  const textareaRef = useRef();
 
   // Update code when initialCode changes (for new chat)
   useEffect(() => {
@@ -52,44 +46,53 @@ const EditorPanel = ({ initialCode = '', onReview, isLoading }) => {
       e.preventDefault();
       handleReviewClick();
     }
+    
+    // Handle tab key for indentation
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const textarea = e.target;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      
+      // Insert tab character
+      const newValue = code.substring(0, start) + '  ' + code.substring(end);
+      setCode(newValue);
+      
+      // Move cursor
+      setTimeout(() => {
+        textarea.selectionStart = textarea.selectionEnd = start + 2;
+      }, 0);
+    }
   };
+
   return (
     <div className="editor-panel-container">
-      <div className="code-editor-wrapper">        <Editor
+      <div className="code-editor-wrapper">
+        <textarea
+          ref={textareaRef}
           value={code}
-          onValueChange={newCode => setCode(newCode)}
-          highlight={code => {
-            // Return empty string to disable highlighting completely
-            // This prevents any overlay issues
-            return '';
-          }}
-          padding={16}
-          textareaId="code-editor-textarea"
-          className="editor-textarea"
+          onChange={(e) => setCode(e.target.value)}
           onKeyDown={handleKeyDown}
+          placeholder="Enter your code here... (Ctrl+Enter to submit)"
+          spellCheck={false}
+          className="working-code-textarea"
           style={{
-            fontFamily: '"Fira code", "Fira Mono", monospace',
-            fontSize: 16,
-            outline: 0,
+            width: '100%',
             height: '100%',
             backgroundColor: '#0c0c0c',
             color: '#ffffff',
+            border: 'none',
+            outline: 'none',
+            resize: 'none',
+            fontFamily: '"Fira code", "Fira Mono", monospace',
+            fontSize: '16px',
+            lineHeight: '1.5',
+            padding: '16px',
             caretColor: '#ffffff',
+            borderRadius: '0.7rem',
+            boxSizing: 'border-box',
           }}
-          textareaProps={{
-            placeholder: "Enter your code here... (Ctrl+Enter to submit)",
-            spellCheck: false,
-            style: {
-              outline: 'none',
-              border: 'none',
-              resize: 'none',
-              backgroundColor: '#0c0c0c !important',
-              color: '#ffffff !important',
-              fontFamily: '"Fira code", "Fira Mono", monospace',
-              fontSize: '16px',
-              lineHeight: '1.5',
-            }
-          }}        />
+        />
         
         {/* Buttons absolutely positioned relative to code-editor-wrapper */}
         <button
@@ -129,4 +132,4 @@ const EditorPanel = ({ initialCode = '', onReview, isLoading }) => {
   );
 };
 
-export default EditorPanel;
+export default EditorPanelWorking;

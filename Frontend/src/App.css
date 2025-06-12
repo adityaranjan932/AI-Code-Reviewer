@@ -1,3 +1,6 @@
+/* Import critical text visibility fix */
+@import './components/EditorTextVisible.css';
+
 * {
   margin: 0;
   padding: 0;
@@ -11,33 +14,82 @@ body,
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #242424;
-  color: rgba(255, 255, 255, 0.87);
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 25%, #0d0d0d 50%, #1e1e1e 75%, #0a0a0a 100%);
+  background-attachment: fixed;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* Subtle animated background pattern */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(100, 108, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(120, 119, 198, 0.08) 0%, transparent 50%);
+  animation: backgroundShift 20s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes backgroundShift {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
 }
 
 /* Main content area below navbar */
-.app-main-content { /* Renamed from 'main' to avoid conflict */
-  flex-grow: 1; /* Fill remaining vertical space */
+.app-main-content {
+  flex-grow: 1;
   width: 100%;
-  padding: 1.5rem; /* Consistent padding on all sides */
+  padding: 1.5rem;
   display: flex;
-  flex-direction: row; /* Ensure side-by-side layout */
-  gap: 1.5rem; /* Increased gap for better visual separation */
-  overflow: hidden; /* Prevent layout issues */
+  flex-direction: row;
+  gap: 1.5rem;
+  overflow: hidden;
+  position: relative;
+  align-items: stretch;
+  height: calc(100vh - 70px);
 }
 
 /* Left and Right panel containers */
 .left-panel,
 .right-panel {
-  flex-basis: calc(50% - (1.5rem / 2)); /* Each takes half the width, accounting for the new gap */
-  height: 100%; /* Fill available vertical space */
-  overflow: hidden; /* Important for border-radius and shadow to look right */
-  display: flex; /* Allows child component to fill the panel */
+  flex-basis: calc(50% - 0.75rem);
+  height: 100%;
+  overflow: hidden;
+  display: flex;
   position: relative;
-  border-radius: 0.7rem; /* Rounded corners for the panel containers */
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth and a modern look */
+  border-radius: 16px;
+  background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+  box-shadow: 
+    0 12px 32px rgba(0, 0, 0, 0.4),
+    0 6px 16px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.left-panel:hover,
+.right-panel:hover {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 16px 40px rgba(0, 0, 0, 0.5),
+    0 8px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Remove panel icons that are misaligned */
+.left-panel::before,
+.right-panel::before {
+  display: none;
 }
 
 /* The EditorPanel and MarkdownPanel components already have height: 100% and width: 100% 
@@ -53,8 +105,7 @@ body,
 
   .left-panel,
   .right-panel {
-    flex-basis: auto; /* Reset flex-basis for column layout */
-    width: 100%;    /* Panels take full width */
+    flex-basis: auto; /* Reset flex-basis for column layout */    width: 100%;    /* Panels take full width */
     height: auto;   /* Height will be managed by flex property */
     flex: 1;        /* Each panel takes equal share of available vertical space */
     /* min-height: 250px; /* Optional: ensure a minimum height for usability */

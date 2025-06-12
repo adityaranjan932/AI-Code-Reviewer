@@ -3,90 +3,153 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  width: 100%; /* Ensure it fills the parent */
-  background-color: #000000; /* Original black background */
-  border-radius: 0.7rem;
+  width: 100%;
+  background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
+  border-radius: 16px;
   overflow: hidden;
-  position: relative; /* Needed for absolute positioning of review button */
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .code-editor-wrapper {
-  flex-grow: 1; /* Takes up space above the button container */
-  position: relative; /* For positioning plus button/image preview */
-  background-color: #0c0c0c; /* Original editor background */
-  border-radius: 0.7rem; /* Apply radius here now */
+  flex: 1;
+  position: relative;
+  background: linear-gradient(145deg, #0c0c0c, #1a1a1a);
+  border-radius: 16px;
   overflow: hidden;
   display: flex;
+  min-height: 0;
+  padding: 1rem;
 }
 
-.editor-textarea {
-  flex-grow: 1;
+.working-code-textarea {
+  flex: 1;
+  background: linear-gradient(145deg, #0a0a0a, #151515) !important;
+  color: #ffffff !important;
+  caret-color: #646cff !important;
   overflow: auto !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  padding: 1.5rem !important;
+  font-family: "JetBrains Mono", "Fira Code", "Consolas", monospace !important;
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.3),
+    0 1px 2px rgba(255, 255, 255, 0.05) !important;
+  transition: all 0.3s ease !important;
+}
+
+.working-code-textarea:focus {
+  outline: none !important;
+  border-color: rgba(100, 108, 255, 0.3) !important;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 0 3px rgba(100, 108, 255, 0.1),
+    0 4px 12px rgba(100, 108, 255, 0.2) !important;
+}
+
+.working-code-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+  font-style: italic !important;
+}
+
+/* Ensure the editor fills the space and scrolls properly */
+.editor-textarea > div {
+  height: 100% !important;
+  min-height: 100% !important;
   background-color: #0c0c0c !important;
-  color: #f0f0f0;
-  caret-color: white;
-  /* Ensure pre/code inside also have correct background */
-  & pre, & code {
-      background-color: #0c0c0c !important;
-  }
+  color: #ffffff !important;
 }
 
-/* Style the underlying textarea if needed */
 .editor-textarea textarea {
-    outline: none !important;
-    border: none !important;
-    box-shadow: none !important;
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  resize: none !important;
+  background-color: #0c0c0c !important;
+  color: #ffffff !important;
+  font-family: "Fira code", "Fira Mono", monospace !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  overflow-y: auto !important;
+  padding: 16px !important;
+  box-sizing: border-box !important;
+  caret-color: #ffffff !important;
 }
 
-.code-editor-wrapper pre,
-.code-editor-wrapper code {
+.editor-textarea pre {
+  margin: 0 !important;
+  padding: 16px !important;
+  background-color: #0c0c0c !important;
+  color: #ffffff !important;
+  font-family: "Fira code", "Fira Mono", monospace !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  overflow: visible !important;
   height: auto !important;
-  min-height: 100%;
-  width: 100%;
-  margin: 0;
-  /* background-color: #0c0c0c !important; */ /* Handled by .editor-textarea */
+  min-height: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.editor-textarea code {
+  background-color: transparent !important;
+  color: inherit !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
 }
 
 .plus-button {
   position: absolute;
+  margin: 0.5rem;
   bottom: 16px;
   left: 16px;
-  background: #23272f;
-  border: 1px solid #444;
+  background: linear-gradient(135deg, #2d3748, #4a5568);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 1px 4px #0006;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   padding: 0;
-  z-index: 2;
-  transition: background 0.2s, border 0.2s;
-  color: #fff; /* Icon color */
+  z-index: 100;
+  transition: all 0.3s ease;
+  color: #ffffff;
 }
 
 .plus-button:hover {
-  background: #343a40;
+  background: linear-gradient(135deg, #4a5568, #2d3748);
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  border-color: rgba(100, 108, 255, 0.3);
 }
 
 .image-preview-badge {
   position: absolute;
   bottom: 18px;
-  left: 50px;
+  left: 54px;
   font-size: 12px;
   color: #fff;
   background: #23272f;
-  padding: 2px 8px;
-  border-radius: 4px;
-  z-index: 2;
+  padding: 4px 8px;
+  border-radius: 6px;
+  z-index: 10;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: calc(100% - 100px);
-  display: inline-flex; /* Align icon and text */
+  max-width: calc(100% - 120px);
+  display: inline-flex;
   align-items: center;
+  border: 1px solid #444;
 }
 
 .image-preview-icon {
@@ -94,31 +157,204 @@
   vertical-align: middle;
 }
 
-/* Remove the separate review-button-container */
-/* .review-button-container { ... } */
-
-/* Position review button absolutely like before */
 .review-button {
-  position: absolute; /* Position relative to editor-panel-container */
+  position: absolute;
   bottom: 1rem;
   right: 1rem;
-  background-color: rgb(219, 219, 255);
-  color: #000000;
-  padding: 0.5rem 2rem;
-  font-weight: 500;
+  background: linear-gradient(135deg, #646cff, #535bf2);
+  color: #ffffff;
+  padding: 0.75rem 1.5rem;
+  margin: 0.5rem;
+  font-weight: 600;
   cursor: pointer;
+  -webkit-user-select: none;
   user-select: none;
-  border-radius: 0.7rem;
+  border-radius: 8px;
   border: none;
-  transition: background-color 0.2s;
-  z-index: 3; /* Ensure it's above other elements if needed */
+  transition: all 0.3s ease;
+  z-index: 100;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(100, 108, 255, 0.3);
+  text-transform: none;
+  letter-spacing: normal;
+  min-width: auto;
+  width: auto;
 }
 
 .review-button:disabled {
-  background-color: #a0a0c0; /* Muted color when disabled */
+  background: linear-gradient(135deg, #6b7280, #9ca3af);
   cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .review-button:not(:disabled):hover {
-  background-color: #c8c8f0; /* Lighter on hover */
+  background: linear-gradient(135deg, #535bf2, #4c51bf);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(100, 108, 255, 0.4);
+}
+
+.review-button:not(:disabled):active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(100, 108, 255, 0.3);
+}
+
+/* Scrollbar styling */
+.editor-textarea textarea::-webkit-scrollbar {
+  width: 8px;
+}
+
+.editor-textarea textarea::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 4px;
+}
+
+.editor-textarea textarea::-webkit-scrollbar-thumb {
+  background-color: #444;
+  border-radius: 4px;
+  border: 2px solid #1a1a1a;
+}
+
+.editor-textarea textarea::-webkit-scrollbar-thumb:hover {
+  background-color: #666;
+}
+
+/* Additional rules to ensure text visibility in react-simple-code-editor */
+#code-editor-textarea {
+  color: #ffffff !important;
+  background-color: #0c0c0c !important;
+  caret-color: #ffffff !important;
+}
+
+/* Target all possible text elements within the editor */
+.editor-textarea * {
+  color: #ffffff !important;
+}
+
+/* Specifically target the contenteditable area if it exists */
+.editor-textarea [contenteditable="true"] {
+  color: #ffffff !important;
+  background-color: #0c0c0c !important;
+  caret-color: #ffffff !important;
+}
+
+/* Target any spans or divs that might contain text */
+.editor-textarea span,
+.editor-textarea div {
+  color: #ffffff !important;
+}
+
+/* CRITICAL: Override ALL Prism token colors to ensure visibility */
+.editor-textarea .token,
+.editor-textarea .token.comment,
+.editor-textarea .token.prolog,
+.editor-textarea .token.doctype,
+.editor-textarea .token.cdata,
+.editor-textarea .token.punctuation,
+.editor-textarea .token.property,
+.editor-textarea .token.tag,
+.editor-textarea .token.boolean,
+.editor-textarea .token.number,
+.editor-textarea .token.constant,
+.editor-textarea .token.symbol,
+.editor-textarea .token.deleted,
+.editor-textarea .token.selector,
+.editor-textarea .token.attr-name,
+.editor-textarea .token.string,
+.editor-textarea .token.char,
+.editor-textarea .token.builtin,
+.editor-textarea .token.inserted,
+.editor-textarea .token.operator,
+.editor-textarea .token.entity,
+.editor-textarea .token.url,
+.editor-textarea .token.variable,
+.editor-textarea .token.atrule,
+.editor-textarea .token.attr-value,
+.editor-textarea .token.function,
+.editor-textarea .token.class-name,
+.editor-textarea .token.keyword,
+.editor-textarea .token.regex,
+.editor-textarea .token.important {
+  color: #ffffff !important;
+  background: none !important;
+}
+
+/* Target any potential overlay elements */
+.editor-textarea .npm__react-simple-code-editor__textarea,
+.editor-textarea .npm__react-simple-code-editor__overlay {
+  color: #ffffff !important;
+  background-color: transparent !important;
+}
+
+/* Ensure all text nodes are visible */
+.editor-textarea,
+.editor-textarea * {
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+
+/* Firefox scrollbar */
+.editor-textarea textarea {
+  scrollbar-width: thin;
+  scrollbar-color: #444 #1a1a1a;
+}
+
+/* FINAL OVERRIDE: Ensure text is always visible - highest specificity */
+.editor-panel-container .code-editor-wrapper .editor-textarea,
+.editor-panel-container .code-editor-wrapper .editor-textarea *,
+.editor-panel-container .code-editor-wrapper .editor-textarea textarea,
+.editor-panel-container .code-editor-wrapper .editor-textarea pre,
+.editor-panel-container .code-editor-wrapper .editor-textarea code,
+.editor-panel-container .code-editor-wrapper .editor-textarea span,
+.editor-panel-container .code-editor-wrapper .editor-textarea div {
+  color: #ffffff !important;
+  background-color: transparent !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+/* Extra insurance against any library overrides */
+body .editor-textarea,
+body .editor-textarea * {
+  color: #ffffff !important;
+}
+
+/* Working textarea styles */
+.working-code-textarea {
+  color: #ffffff !important;
+  background-color: #0c0c0c !important;
+  caret-color: #ffffff !important;
+  scrollbar-width: thin;
+  scrollbar-color: #444 #1a1a1a;
+}
+
+.working-code-textarea:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.3);
+}
+
+.working-code-textarea::placeholder {
+  color: #888888 !important;
+  opacity: 0.7 !important;
+}
+
+/* Webkit scrollbar for the working textarea */
+.working-code-textarea::-webkit-scrollbar {
+  width: 8px;
+}
+
+.working-code-textarea::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 4px;
+}
+
+.working-code-textarea::-webkit-scrollbar-thumb {
+  background-color: #444;
+  border-radius: 4px;
+  border: 2px solid #1a1a1a;
+}
+
+.working-code-textarea::-webkit-scrollbar-thumb:hover {
+  background-color: #666;
 }

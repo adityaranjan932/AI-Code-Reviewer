@@ -3,29 +3,104 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 1.5rem;
-  background-color: #1f1f1f; /* Dark charcoal color */
-  color: #e0e0e0; /* Light grey text */
-  height: 60px;
-  flex-shrink: 0; /* Prevent navbar from shrinking */
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #111111 0%, #1a1a1a 50%, #0f0f0f 100%);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  height: 70px;
+  flex-shrink: 0;
+  position: relative;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
 }
 
-.navbar-spacer {
+.navbar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(100, 108, 255, 0.5), transparent);
+}
+
+/* New styles for left, title, and right sections */
+.navbar-left-section {
   flex: 1;
+  display: flex;
+  justify-content: flex-start;
 }
 
-.navbar-title {
-  font-size: 1.4rem;
-  font-weight: bold;
-  text-align: center;
-  flex: 2; /* Allow title to take more space */
+.navbar-title-section {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .navbar-button-wrapper {
   flex: 1;
   display: flex;
   justify-content: flex-end;
-  align-items: center; /* Align items vertically */
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+  background: linear-gradient(135deg, #ffffff, #e0e0e0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar-title::before {
+  content: '�';
+  font-size: 1.4rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  margin-right: 0.5rem;
+}
+
+.new-chat-button {
+  background: linear-gradient(135deg, #646cff, #535bf2);
+  color: #ffffff;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-right: 1rem;
+  box-shadow: 0 4px 12px rgba(100, 108, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.new-chat-button::before {
+  content: '💬';
+  font-size: 1rem;
+}
+
+.new-chat-button:hover {
+  background: linear-gradient(135deg, #535bf2, #4c51bf);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(100, 108, 255, 0.4);
+}
+
+.new-chat-button:active {
+  transform: translateY(0);
 }
 
 .navbar-button {
@@ -46,19 +121,53 @@
 
 /* Add styles for the profile avatar button */
 .profile-avatar-button {
-  background: none;
-  border: none;
-  padding: 0;
+  background: linear-gradient(145deg, #2a2a2a, #1f1f1f);
+  border: 2px solid rgba(100, 108, 255, 0.3);
+  padding: 4px;
   cursor: pointer;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 1rem; /* Add some space if needed */
+  margin-left: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    inset 0 1px 2px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-avatar-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, transparent, rgba(100, 108, 255, 0.1));
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+.profile-avatar-button:hover {
+  border-color: rgba(100, 108, 255, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 20px rgba(100, 108, 255, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.15);
+}
+
+.profile-avatar-button:hover::before {
+  opacity: 1;
 }
 
 .profile-avatar-button img {
-  display: block; /* Remove extra space below image */
+  display: block;
+  border-radius: 50%;
+  position: relative;
+  z-index: 1;
 }
 
 /* Optional: Style for loading text */
@@ -70,83 +179,141 @@
 /* Styles for profile dropdown */
 .profile-dropdown-menu {
   position: absolute;
-  top: calc(100% + 10px); /* Position below the button with a small gap */
+  top: calc(100% + 10px);
   right: 0;
-  background-color: #202123; /* Darker background, similar to ChatGPT */
-  border-radius: 8px; /* Slightly larger border radius */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5); /* More pronounced shadow */
-  z-index: 1001; /* Ensure it's above other navbar items if necessary */
-  min-width: 220px; /* Increased min-width for better spacing */
-  color: #ececec; /* Lighter text color for contrast */
+  background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+  border-radius: 16px;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.8),
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  z-index: 2000;
+  min-width: 280px;
+  color: #ffffff;
   font-size: 0.9rem;
-  border: 1px solid #3a3a3a; /* Softer border color */
-  padding: 8px 0; /* Add some padding at top and bottom of the menu */
+  border: 1px solid rgba(100, 108, 255, 0.2);
+  padding: 0;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+  animation: profileDropdownSlide 0.3s ease-out;
+}
+
+@keyframes profileDropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .profile-dropdown-menu .user-info-section {
-  padding: 12px 16px;
-  border-bottom: 1px solid #3a3a3a; /* Softer separator */
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
-  align-items: center; /* Align avatar and text */
-  gap: 12px; /* Space between avatar and text */
+  align-items: center;
+  gap: 16px;
+  background: linear-gradient(135deg, rgba(100, 108, 255, 0.1), rgba(120, 119, 198, 0.05));
+  position: relative;
+}
+
+.profile-dropdown-menu .user-info-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(100, 108, 255, 0.5), transparent);
 }
 
 .profile-dropdown-menu .user-info-section img {
-  width: 40px; /* Slightly larger avatar */
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
+  border: 2px solid rgba(100, 108, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .profile-dropdown-menu .user-details strong {
   display: block;
-  font-size: 1rem; /* Larger font for name */
-  font-weight: 500;
-  color: #ffffff; /* White color for name */
+  margin-bottom: 4px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1rem;
+  background: linear-gradient(135deg, #ffffff, #e0e0e0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .profile-dropdown-menu .user-details .user-email {
-  font-size: 0.8em;
-  color: #b0b0b0; /* Lighter grey for email */
-  margin-top: 2px;
+  font-size: 0.85rem;
+  color: #b0b0b0;
+  opacity: 0.8;
 }
 
-/* New styles for dropdown actions */
 .profile-dropdown-menu .dropdown-actions {
-  display: flex;
-  flex-direction: column; /* Stack buttons vertically */
-  padding: 8px; /* Add some padding around the actions block */
+  padding: 12px 0;
 }
 
 .profile-dropdown-menu .dropdown-action-button {
   display: flex;
   align-items: center;
-  gap: 10px; /* Space between icon (if any) and text */
-  width: 100%; /* Make buttons take full width of their container */
-  padding: 10px 12px;
-  border: none;
+  gap: 12px;
   background: none;
-  color: #ececec; /* Light text color */
+  border: none;
+  color: #e0e0e0;
+  padding: 14px 20px;
   text-align: left;
+  width: 100%;
   cursor: pointer;
-  border-radius: 6px; /* Rounded corners for buttons */
-  font-size: 0.9rem;
-  transition: background-color 0.2s ease;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-dropdown-menu .dropdown-action-button::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  background: linear-gradient(90deg, rgba(100, 108, 255, 0.3), transparent);
+  transition: width 0.3s ease;
 }
 
 .profile-dropdown-menu .dropdown-action-button:hover {
-  background-color: #343541; /* Darker background on hover, similar to ChatGPT */
+  background: linear-gradient(90deg, rgba(100, 108, 255, 0.1), transparent);
+  color: #ffffff;
+  transform: translateX(4px);
 }
 
-/* Specific style for logout button if needed, e.g., for a different color */
-.profile-dropdown-menu .logout-button-specific {
-  /* color: #ff8a8a; */ /* Example: Reddish color for logout */
+.profile-dropdown-menu .dropdown-action-button:hover::before {
+  width: 4px;
 }
 
-/* Optional: Add an icon to the logout button if you use react-icons */
-/* .profile-dropdown-menu .logout-button svg {
-  font-size: 1.1em;
-} */
-/* Ensure dropdown items are distinct */
-.profile-dropdown-menu .dropdown-item-button + .dropdown-item-button {
-  margin-top: 0; /* Remove extra top margin if buttons are stacked */
+.profile-dropdown-menu .dropdown-action-button.logout-button-specific:hover {
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.1), transparent);
+  color: #ff6b6b;
+}
+
+.profile-dropdown-menu .dropdown-action-button.logout-button-specific:hover::before {
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.3), transparent);
+}
+
+/* Ensure icons (if used) are styled appropriately */
+.profile-dropdown-menu .dropdown-action-button svg {
+  margin-right: 8px;
+  transition: transform 0.3s ease;
+}
+
+.profile-dropdown-menu .dropdown-action-button:hover svg {
+  transform: scale(1.1);
 }

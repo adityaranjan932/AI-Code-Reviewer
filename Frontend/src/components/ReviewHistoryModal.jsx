@@ -9,7 +9,6 @@ const ReviewHistoryModal = ({ isOpen, onClose }) => {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
   useEffect(() => {
     if (isOpen && user) {
       const fetchHistory = async () => {
@@ -36,9 +35,30 @@ const ReviewHistoryModal = ({ isOpen, onClose }) => {
     }
   }, [isOpen, user]);
 
+  // Handle escape key press
+  useEffect(() => {
+    const handleEscapeKey = (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscapeKey);
+      return () => {
+        document.removeEventListener('keydown', handleEscapeKey);
+      };
+    }
+  }, [isOpen, onClose]);
+
   const handleHistoryItemClick = (item) => {
     selectHistoryItem(item); // Use the function from context
     onClose(); // Close the modal
+  };
+  const handleCloseClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onClose();
   };
 
   if (!isOpen) {
@@ -46,15 +66,19 @@ const ReviewHistoryModal = ({ isOpen, onClose }) => {
   }
 
   return (
-    <div className="review-history-modal-overlay">
-      <div className="review-history-modal-content">
-        <button onClick={onClose} className="review-history-modal-close-btn">
+    <div className="review-history-modal-overlay" onClick={onClose}>
+      <div className="review-history-modal-content" onClick={(e) => e.stopPropagation()}>
+        <button 
+          onClick={handleCloseClick} 
+          className="review-history-modal-close-btn"
+          type="button"
+          aria-label="Close modal"
+        >
           &times;
-        </button>
-        <h2>Review History</h2>
-        {loading && <p>Loading history...</p>}
+        </button><h2>Review History</h2>
+        {loading && <p className="loading-message">Loading history...</p>}
         {error && <p className="error-message">{error}</p>}
-        {!loading && !error && history.length === 0 && <p>No review history found.</p>}
+        {!loading && !error && history.length === 0 && <p className="empty-message">No review history found.</p>}
         {!loading && !error && history.length > 0 && (
           <ul className="history-list">
             {history.map((item) => (

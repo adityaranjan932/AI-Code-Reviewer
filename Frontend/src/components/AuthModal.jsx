@@ -9,7 +9,6 @@ const AuthModal = ({ isOpen, onClose }) => {
   const {
     authModalOpen,
     closeAuthModal,
-    authModalReason, // Get the reason from context
   } = useContext(AuthContext);
   const [isLoginView, setIsLoginView] = useState(true); // Start with login view
 
@@ -37,12 +36,10 @@ const AuthModal = ({ isOpen, onClose }) => {
     return null;
   }
 
-  return (
-    // Overlay handles background click to close
+  return (    // Overlay handles background click to close
     <div className="auth-modal-overlay" onClick={onClose}>
       <div className="auth-modal-content" onClick={handleContentClick}>
         <button className="auth-modal-close-btn" onClick={onClose}>&times;</button>
-        {authModalReason && <p className="auth-modal-reason">{authModalReason}</p>} {/* Display the reason */}
         {isLoginView ? (
           <LoginForm
             onSwitchToSignup={() => setIsLoginView(false)}
